@@ -1,0 +1,72 @@
+
+import sys
+import imaplib
+imaplib._MAXLINE = 200000
+import getpass
+import email
+import datetime
+IMAP_SERVER = 'imap.gmail.com'
+
+
+def process_mailbox(M):
+    """
+    Dump all emails in the folder to files in output directory.
+    """
+    
+    rv, data = M.search(None, "ALL")
+    if rv != 'OK':
+        print("No messages found!")
+        return
+
+    num = data[0].split()[-2]
+    rv, data = M.fetch(num, '(RFC822)')
+    raw_email = data[0][1]
+    email_message = email.message_from_bytes(raw_email)
+    print(email_message)
+    print("!!!",email_message['Subject'],'\n')
+    print(email_message['Date'],"T")
+    print(email_message['To'])
+    print(email.utils.parseaddr(email_message['From'])) # for parsing "Yuji Tomita" <yuji@grovemade.com>
+    print(email_message.get_payload()) # print all headers
+        
+    maintype = email_message.get_content_maintype()
+    if maintype == 'multipart':
+        for part in email_message.walk():
+            if part.get_content_maintype() == 'multipart': continue
+            if part.get('Content-Disposition') is None: continue
+            filename = part.get_filename()
+            fp = open(filename, 'wb')
+            fp.write(part.get_payload(decode=True))
+            fp.close()
+
+
+    list1 = []
+    list1.append({'username':"kalyani",
+                  'useremailid': "kalyani.andhare29@gmail.com",
+                  'email_from': email_message['From'],
+                  'email_to': email_message['To'],
+                  'date': datetime.datetime.now(),
+                  'subject': email_message['Subject'],
+                  'filename': "filename.xls",
+                  'filedata': "NA", })
+    print(list1)
+    return list1
+
+
+def login_to_user(userid,password):
+    M = imaplib.IMAP4_SSL(IMAP_SERVER)
+    M.login(userid,password)
+    rv, data = M.select("Inbox")
+    if rv == 'OK':
+        list1 = process_mailbox(M)
+        M.close()
+    
+    else:
+        print("ERROR: Unable to open mailbox ", rv)
+        M.logout()
+
+    return list1
+
+def get_data(data):
+    list1 = login_to_user(data[0].email_id,data[0].password)
+    return list1
