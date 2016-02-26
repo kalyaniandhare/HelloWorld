@@ -1,4 +1,5 @@
 {% load staticfiles %}
+
 <html>
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
@@ -8,6 +9,8 @@
     <a href="{% url 'new_user' %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>
     <title>Django Girls blog</title>
   </head>
-  {% block content %}
-  {% endblock %}
+  <body>
+    {% block content %}
+    {% endblock %}
+  </body>
 </html>

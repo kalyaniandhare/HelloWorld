@@ -5,7 +5,15 @@ from django.shortcuts import render, get_object_or_404
 from .forms import UserForm
 from django.shortcuts import redirect
 from extractore import task
- 
+from django.contrib.auth.decorators import login_required
+
+#@login_required
+#def login_view(request):
+
+@login_required
+def home(request):
+    return render(request, 'extractore/base.html')
+
 def show_user(request):
     data = Extractore.objects.all()
     value = task.get_data(data)
@@ -30,7 +38,7 @@ def user_detail(request, pk):
     return render(request, 'extractore/user_detail.html', {'data': data})
 
 def new_user(request):
-    
+
     if request.method == "POST":
         form = UserForm(request.POST)
         if form.is_valid():
