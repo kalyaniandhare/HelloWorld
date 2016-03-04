@@ -17,12 +17,14 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from django.contrib.auth.views import logout
 from extractore import views
+from extractore.views import dashbord
 
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/', include('django.contrib.auth.urls')),
-    url(r'^$',views.home, name = "home"),
+    #url(r'^/$',views.home, name = "home"),
+    url(r'^$',views.dashbord, name = 'dashbord'),
     url(r'^logout/$', 'django.contrib.auth.views.logout', name="logout"),
     url(r'', include('extractore.urls'))
 ]
