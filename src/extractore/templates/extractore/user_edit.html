@@ -1,9 +1,0 @@
-{% extends 'extractore/base.html'%}
-
-{% block content %}
-  <h3>New Form</h3>
-  <form method="POST" class="user-form">{% csrf_token %}
-    {{form}}
-    <button type="submit" class="save btn btn-default">Save</button>
-  </form>
-{% endblock %}

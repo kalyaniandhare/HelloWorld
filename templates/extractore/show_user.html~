@@ -1,0 +1,13 @@
+{% extends 'extractore/base.html'%}
+{% block content %}
+<a href="{% url 'new_user' %}" class="top-menu"><span class="glyphicon glyphicon-plus" style="color: blue;"></span></a>
+{% for data in data1 %}
+<div class="data">
+  <div class="date">
+    {{ data.published_date }}
+  </div>
+  <h3><a href="{% url 'user_detail' pk=data.pk %}">{{ data.name |linebreaks }}</a></h3>
+
+</div>
+{% endfor %}
+{% endblock %}

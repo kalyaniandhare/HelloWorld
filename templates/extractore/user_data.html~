@@ -1,0 +1,20 @@
+{% extends 'extractore/base.html'%}
+{% block content %}
+
+{% for d in user%}
+<div class="data">
+  <div class="date">
+    {{ d.username | linebreaks}}
+    {{ d.useremailid | linebreaks}}
+    {{ d.email_form | linebreaks}}
+    {{ d.email_to | linebreaks}}
+    {{ d.date | linebreaks}}
+    {{ d.subject | linebreaks}}
+    {{ d.filename | linebreaks}}
+    {{ d.filedata | linebreaks}}
+  </div>
+  <h3><a href="{% url 'user_detail' pk=data.pk %}">{{ data.name |linebreaks }}</a></h3>
+
+</div>
+{% endfor %}
+{% endblock %}

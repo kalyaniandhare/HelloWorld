@@ -14,39 +14,55 @@ from django.contrib.auth.decorators import login_required
 def home(request):
     return render(request, 'extractore/base.html')
 
+@login_required
 def show_user(request):
     data = Extractore.objects.all()
-    value = task.get_data(data)
-    user= StoreData()
-    user.username = value[0]['username']
-    user.useremailid = value[0]['useremailid']
-    user.email_from = value[0]['email_from']
-    user.email_to =  value[0]['email_to']
-    user.date = value[0]['date']
-    user.subject = value[0]['subject']
-    user.filename = value[0]['filename']
-    user.filedata = value[0]['filedata']
-    user.save()
-    print(value)
-    return render(request, 'extractore/show_user.html',{'data' : data})
+    return render(request, 'extractore/show_user.html',{'data1' : data})
 
 
+@login_required
+def userdata(request, pk):
 
+    data = get_object_or_404(StoreData, pk=pk)
+    print("user_data",data)
+    return render(request, 'extractore/user_data.html', {'d': data})
+
+@login_required
 def user_detail(request, pk):
 
     data = get_object_or_404(Extractore, pk=pk)
     return render(request, 'extractore/user_detail.html', {'data': data})
 
-def new_user(request):
+@login_required
+def user_edit(request,pk):
 
+    print(request.method,pk)
+    if request.method == "GET":
+        user = Extractore.objects.get(pk=pk)
+        print(user)
+        form = UserForm(instance=user)
+        #data = get_object_or_404(Extractore, pk=pk)
+        return render(request,'extractore/user_edit.html', {'form': form})
+
+
+
+def dashbord(request):
+
+    return render(request,'extractore/dashbord.html')
+
+@login_required
+def new_user(request, pk= None):
     if request.method == "POST":
-        form = UserForm(request.POST)
+        form = UserForm(data=request.POST)
         if form.is_valid():
             user = form.save(commit=False)
             user.published_date = timezone.now()
-            print(user)
             user.save()
-            return redirect('user_detail', pk=user.pk)
+            user_data = task.get_data(user.email_id,user.password)
+            #return render(request, 'extractore/user_data.html',{'d' : user_data})
+            return redirect('userdata', pk=user_data.pk)
     else:
-        form = UserForm()
+        user = Extractore.objects.get(pk=pk) if pk else None
+        form = UserForm(instance=user)
+
     return render(request,'extractore/user_edit.html', {'form':form})

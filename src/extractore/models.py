@@ -7,16 +7,16 @@ from django.utils import timezone
 
 class Extractore(models.Model):
 
-    name = models.CharField(max_length=200)
-    bank_name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200, blank = False)
+    bank_name = models.CharField(max_length=200 , blank = False)
     email_id = models.EmailField(max_length=200 , unique = True, blank = False)
-    password = models.CharField(max_length=10)
+    password = models.CharField(max_length=50)
 
     created_date = models.DateTimeField(
         default=timezone.now)
     published_date = models.DateTimeField(
         blank=True, null=True)
-           
+
 
     def publish(self):
         self.published_date = timezone.now()
@@ -26,7 +26,7 @@ class Extractore(models.Model):
         return self.name
 
 
-    
+
 class StoreData(models.Model):
 
     username = models.CharField(max_length=200)

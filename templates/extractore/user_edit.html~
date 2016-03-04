@@ -1,0 +1,22 @@
+{% extends 'extractore/base.html'%}
+{% block content %}
+<div class="container">
+  <h3>New Form</h3>
+  <form method="POST" class="user-form form-horizontal" role="form">
+    {% csrf_token %}
+    {% for field in form %}
+    <fieldset class="form-group">
+      <label class="control-label" for="id_{{ field.name }}">{{ field.label }}</label>
+      {% if field.label == "Password" %}
+      <input type= "password" class="form-control" id = "id_{{ field.name }}" name = "{{ field.name }}" placeholder="Enter {{ field.label }}">
+      {% else %}
+      <input type= "text" class="form-control" id = "id_{{ field.name }}" name = "{{ field.name }}" placeholder="Enter {{ field.label }}">
+      {% endif %}
+    </fieldset>
+    {% endfor %}
+    <button type="submit" class="save btn btn-default">Save</button><br>
+    <h3><a href="{% url 'show_user' %}">show user</a></h3>
+  </form>
+
+</div>
+{% endblock %}
